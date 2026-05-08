@@ -5,12 +5,12 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "build": "next build",
     "dev": "node scripts/run-web.js",
     "dev:web": "node scripts/run-web.js",
     "dev:desktop": "node scripts/run-desktop.js",
     "dev:electron": "npm run dev:desktop",
     "ensure:env": "node scripts/setup-env.js",
-    "build": "next build",
     "build:desktop": "npm run build && electron-builder",
     "package:mac": "npm run build && electron-builder --mac",
     "package:win": "npm run build && electron-builder --win",
@@ -25,10 +25,15 @@
     "prisma:reset": "prisma migrate reset",
     "setup": "npm install && prisma generate && prisma db push",
     "check-cli": "node scripts/check-claude-cli.js",
-    "postinstall": "npm run ensure:env"
+    "postinstall": "npm run ensure:env",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.68",
+    "@opennextjs/cloudflare": "^1.19.8",
     "@prisma/client": "^6.1.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.17",
@@ -56,7 +61,8 @@
     "prettier": "^3.4.2",
     "prisma": "^6.1.0",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "wrangler": "^4.90.0"
   },
   "engines": {
     "node": ">=20.0.0",
