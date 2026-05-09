@@ -92,6 +92,18 @@ const CLI_OPTIONS: CLIOption[] = [
     enabled: true,
     models: getModelDefinitionsForCli('glm').map(({ id, name }) => ({ id, name })),
   },
+  {
+    id: 'groq',
+    name: 'Groq',
+    icon: '',
+    description: 'Free, fast LLM inference with Llama and Mixtral models',
+    color: 'from-orange-500 to-amber-500',
+    brandColor: '#F55036',
+    downloadUrl: 'https://console.groq.com/keys',
+    installCommand: 'Get your free API key at console.groq.com',
+    enabled: true,
+    models: getModelDefinitionsForCli('groq').map(({ id, name }) => ({ id, name })),
+  },
 ];
 
 // Global settings are provided by context
@@ -547,6 +559,9 @@ export default function GlobalSettings({ isOpen, onClose, initialTab = 'general'
                             {cli.id === 'gemini' && (
                               <Image src="/gemini.png" alt="Gemini" width={32} height={32} className="w-8 h-8" />
                             )}
+                            {cli.id === 'groq' && (
+                              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold text-sm">G</div>
+                            )}
                           </div>
                           <div className={`flex-1 min-w-0 ${!isInstalled ? 'opacity-40' : ''}`}>
                             <div className="flex items-center gap-2">
@@ -638,6 +653,37 @@ export default function GlobalSettings({ isOpen, onClose, initialTab = 'general'
                                 <p className="text-[11px] text-gray-500 leading-snug">
                                   Injected as <code className="font-mono">CURSOR_API_KEY</code> and passed to <code className="font-mono">cursor-agent</code>.
                                   Leave blank to rely on the logged-in Cursor CLI session.
+                                </p>
+                              </div>
+                            )}
+                            {cli.id === 'groq' && (
+                              <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-600">
+                                  API Key (required)
+                                </label>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type={apiKeyVisibility[cli.id] ? 'text' : 'password'}
+                                    value={settings.apiKey ?? ''}
+                                    onChange={(e) => setCliApiKey(cli.id, e.target.value)}
+                                    placeholder="Enter Groq API key"
+                                    className="flex-1 px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={(event) => {
+                                      event.preventDefault();
+                                      event.stopPropagation();
+                                      toggleApiKeyVisibility(cli.id);
+                                    }}
+                                    className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg bg-white transition-colors"
+                                  >
+                                    {apiKeyVisibility[cli.id] ? 'Hide' : 'Show'}
+                                  </button>
+                                </div>
+                                <p className="text-[11px] text-gray-500 leading-snug">
+                                  Get your free API key at <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">console.groq.com</a>.
+                                  Groq offers free tier with fast inference for Llama and Mixtral models.
                                 </p>
                               </div>
                             )}
