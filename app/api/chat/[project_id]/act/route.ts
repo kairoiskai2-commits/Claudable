@@ -15,6 +15,7 @@ import { initializeNextJsProject as initializeCodexProject, applyChanges as appl
 import { initializeNextJsProject as initializeCursorProject, applyChanges as applyCursorChanges } from '@/lib/services/cli/cursor';
 import { initializeNextJsProject as initializeQwenProject, applyChanges as applyQwenChanges } from '@/lib/services/cli/qwen';
 import { initializeNextJsProject as initializeGLMProject, applyChanges as applyGLMChanges } from '@/lib/services/cli/glm';
+import { executeGroq } from '@/lib/services/cli/groq';
 import { getDefaultModelForCli, normalizeModelId } from '@/lib/constants/cliModels';
 import { streamManager } from '@/lib/services/stream';
 import type { ChatActRequest } from '@/types/backend';
@@ -398,55 +399,83 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     }
 
     if (isInitialPrompt) {
-      const executor =
-        cliPreference === 'codex'
-          ? initializeCodexProject
-          : cliPreference === 'cursor'
-          ? initializeCursorProject
-          : cliPreference === 'qwen'
-          ? initializeQwenProject
-          : cliPreference === 'glm'
-          ? initializeGLMProject
-          : initializeClaudeProject;
+      if (cliPreference === 'groq') {
+        // Groq uses a simpler execution model
+        executeGroq(
+          project_id,
+          projectPath,
+          finalInstruction,
+          selectedModel,
+          undefined,
+          requestId,
+        ).catch((error) => {
+          console.error('[API] Failed to execute Groq:', error);
+        });
+      } else {
+        const executor =
+          cliPreference === 'codex'
+            ? initializeCodexProject
+            : cliPreference === 'cursor'
+            ? initializeCursorProject
+            : cliPreference === 'qwen'
+            ? initializeQwenProject
+            : cliPreference === 'glm'
+            ? initializeGLMProject
+            : initializeClaudeProject;
 
-      executor(
-        project_id,
-        projectPath,
-        finalInstruction,
-        selectedModel,
-        requestId,
-      ).catch((error) => {
-        console.error('[API] Failed to initialize project:', error);
-      });
+        executor(
+          project_id,
+          projectPath,
+          finalInstruction,
+          selectedModel,
+          requestId,
+        ).catch((error) => {
+          console.error('[API] Failed to initialize project:', error);
+        });
+      }
     } else {
-      const executor =
-        cliPreference === 'codex'
-          ? applyCodexChanges
-          : cliPreference === 'cursor'
-          ? applyCursorChanges
-          : cliPreference === 'qwen'
-          ? applyQwenChanges
-          : cliPreference === 'glm'
-          ? applyGLMChanges
-          : applyClaudeChanges;
+      if (cliPreference === 'groq') {
+        // Groq uses a simpler execution model
+        executeGroq(
+          project_id,
+          projectPath,
+          finalInstruction,
+          selectedModel,
+          undefined,
+          requestId,
+        ).catch((error) => {
+          console.error('[API] Failed to execute Groq:', error);
+        });
+      } else {
+        const executor =
+          cliPreference === 'codex'
+            ? applyCodexChanges
+            : cliPreference === 'cursor'
+            ? applyCursorChanges
+            : cliPreference === 'qwen'
+            ? applyQwenChanges
+            : cliPreference === 'glm'
+            ? applyGLMChanges
+            : applyClaudeChanges;
 
-      const sessionId =
-        cliPreference === 'claude'
-          ? project.activeClaudeSessionId || undefined
-          : cliPreference === 'cursor'
-          ? project.activeCursorSessionId || undefined
-          : undefined;
+        const sessionId =
+          cliPreference === 'claude'
+            ? project.activeClaudeSessionId || undefined
+            : cliPreference === 'cursor'
+            ? project.activeCursorSessionId || undefined
+            : undefined;
 
-      executor(
-        project_id,
-        projectPath,
-        finalInstruction,
-        selectedModel,
-        sessionId,
-        requestId,
-      ).catch((error) => {
-        console.error('[API] Failed to execute AI:', error);
-      });
+        executor(
+          project_id,
+          projectPath,
+          finalInstruction,
+          selectedModel,
+          sessionId,
+          requestId,
+        ).catch((error) => {
+          console.error('[API] Failed to execute AI:', error);
+        });
+      }
     }
 
     return NextResponse.json({

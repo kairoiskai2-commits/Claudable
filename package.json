@@ -28,8 +28,10 @@
     "postinstall": "npm run ensure:env"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.39",
     "@anthropic-ai/claude-agent-sdk": "^0.2.68",
     "@prisma/client": "^6.1.0",
+    "ai": "^6.0.177",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.11.17",
     "highlight.js": "^11.10.0",

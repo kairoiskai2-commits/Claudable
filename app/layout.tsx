@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className="bg-gray-50 text-gray-900 min-h-screen">
+      <body className="bg-[#0f0f14] text-white min-h-screen">
         <AuthProvider>
           <GlobalSettingsProvider>
             <Header />

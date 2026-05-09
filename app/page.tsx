@@ -671,39 +671,21 @@ export default function HomePage() {
 
 
   return (
-    <div className="flex h-screen relative overflow-hidden bg-white ">
-      {/* Radial gradient background from bottom center */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-white " />
-        <div 
-          className="absolute inset-0 hidden transition-all duration-1000 ease-in-out"
-          style={{
-            background: `radial-gradient(circle at 50% 100%, 
-              ${(assistantBrandColors[selectedAssistant] || assistantBrandColors.claude)}66 0%, 
-              ${(assistantBrandColors[selectedAssistant] || assistantBrandColors.claude)}4D 25%, 
-              ${(assistantBrandColors[selectedAssistant] || assistantBrandColors.claude)}33 50%, 
-              transparent 70%)`
-          }}
-        />
-        {/* Light mode gradient - subtle */}
-        <div 
-          className="absolute inset-0 block transition-all duration-1000 ease-in-out"
-          style={{
-            background: `radial-gradient(circle at 50% 100%, 
-              ${(assistantBrandColors[selectedAssistant] || assistantBrandColors.claude)}40 0%, 
-              ${(assistantBrandColors[selectedAssistant] || assistantBrandColors.claude)}26 25%, 
-              transparent 50%)`
-          }}
-        />
+    <div className="flex h-screen relative overflow-hidden lovable-gradient-bg">
+      {/* Gradient orbs for depth effect */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="gradient-orb gradient-orb-blue animate-pulse-soft" />
+        <div className="gradient-orb gradient-orb-purple animate-pulse-soft" style={{ animationDelay: '1s' }} />
+        <div className="gradient-orb gradient-orb-pink animate-pulse-soft" style={{ animationDelay: '2s' }} />
       </div>
       
       {/* Content wrapper */}
       <div className="relative z-10 flex h-full w-full">
         {/* Thin sidebar bar when closed */}
-        <div className={`${sidebarOpen ? 'w-0' : 'w-12'} fixed inset-y-0 left-0 z-40 bg-transparent border-r border-gray-200/20 transition-all duration-300 flex flex-col`}>
+        <div className={`${sidebarOpen ? 'w-0' : 'w-12'} fixed inset-y-0 left-0 z-40 bg-transparent border-r border-white/5 transition-all duration-300 flex flex-col`}>
           <button
             onClick={() => setSidebarOpen(true)}
-            className="w-full h-12 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+            className="w-full h-12 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
             title="Open sidebar"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -715,7 +697,7 @@ export default function HomePage() {
           <div className="mt-auto mb-2">
             <button
               onClick={() => setShowGlobalSettings(true)}
-              className="w-full h-12 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              className="w-full h-12 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
               title="Settings"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -727,17 +709,17 @@ export default function HomePage() {
         </div>
         
         {/* Sidebar - Overlay style */}
-        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-40 w-64 bg-white/95 backdrop-blur-2xl border-r border-gray-200 transition-transform duration-300`}>
+        <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-40 w-72 sidebar-dark backdrop-blur-2xl transition-transform duration-300`}>
         <div className="flex flex-col h-full">
           {/* History header with close button */}
-          <div className="p-3 border-b border-gray-200 ">
+          <div className="p-4 border-b border-white/5">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 px-2 py-1">
-                <h2 className="text-gray-900 font-medium text-lg">History</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-white font-semibold text-lg">Projects</h2>
               </div>
               <button
                 onClick={() => setSidebarOpen(false)}
-                className="p-1 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+                className="p-1.5 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 title="Close sidebar"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -747,11 +729,11 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-2">
+          <div className="flex-1 overflow-y-auto p-3 scrollbar-dark">
             <div className="space-y-1">
               {projects.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 text-sm">No conversations yet</p>
+                  <p className="text-zinc-500 text-sm">No projects yet</p>
                 </div>
               ) : (
                 projects.map((project) => {
@@ -760,9 +742,9 @@ export default function HomePage() {
                   return (
                     <div 
                       key={project.id}
-                      className="p-2 px-3 rounded-lg transition-all group"
+                      className="project-card group"
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = `${projectColor}15`;
+                      e.currentTarget.style.backgroundColor = `rgba(255,255,255,0.05)`;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';
@@ -784,21 +766,21 @@ export default function HomePage() {
                         <input
                           name="name"
                           defaultValue={project.name}
-                          className="w-full px-2 py-1 text-sm bg-white border border-gray-300 rounded text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                          className="w-full px-3 py-1.5 text-sm bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-rose-500/50"
                           autoFocus
                           onBlur={() => setEditingProject(null)}
                         />
-                        <div className="flex gap-1">
+                        <div className="flex gap-2 mt-2">
                           <button
                             type="submit"
-                            className="px-2 py-1 text-xs bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
+                            className="px-3 py-1.5 text-xs bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-colors"
                           >
                             Save
                           </button>
                           <button
                             type="button"
                             onClick={() => setEditingProject(null)}
-                            className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                            className="px-3 py-1.5 text-xs bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors"
                           >
                             Cancel
                           </button>
@@ -817,41 +799,16 @@ export default function HomePage() {
                             router.push(`/${project.id}/chat${params.toString() ? '?' + params.toString() : ''}`);
                           }}
                         >
-                          <h3 
-                            className="text-gray-900 text-sm transition-colors truncate"
-                            style={{
-                              '--hover-color': projectColor || '#DE7356'
-                            } as React.CSSProperties}
-                          >
-                            <span 
-                              className="group-hover:text-[var(--hover-color)]"
-                              style={{
-                                transition: 'color 0.2s'
-                              }}
-                            >
-                              {project.name.length > 28 
-                                ? `${project.name.substring(0, 28)}...` 
+                          <h3 className="text-white text-sm font-medium truncate group-hover:text-rose-400 transition-colors">
+                              {project.name.length > 32 
+                                ? `${project.name.substring(0, 32)}...` 
                                 : project.name
                               }
-                            </span>
                           </h3>
                           <div className="flex items-center gap-2 mt-1">
-                            <div className="text-gray-500 text-xs">
+                            <div className="text-zinc-500 text-xs">
                               {formatTime(project.lastMessageAt || project.createdAt)}
                             </div>
-                            {project.preferredCli && (
-                              <div className="flex items-center gap-1">
-                                <span className="text-gray-400 text-xs">•</span>
-                                <span
-                                  className="text-xs transition-colors"
-                                  style={{
-                                    color: (projectColor || '#6B7280') + 'CC'
-                                  }}
-                                >
-                                  {formatCliInfo(projectCli, project.selectedModel ?? undefined)}
-                                </span>
-                              </div>
-                            )}
                           </div>
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
@@ -860,10 +817,10 @@ export default function HomePage() {
                               e.stopPropagation();
                               setEditingProject(project);
                             }}
-                            className="p-1 text-gray-400 hover:text-orange-500 transition-colors"
+                            className="p-1.5 text-zinc-500 hover:text-white hover:bg-white/10 rounded transition-colors"
                             title="Edit project name"
                           >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                           </button>
@@ -872,10 +829,10 @@ export default function HomePage() {
                               e.stopPropagation();
                               openDeleteModal(project);
                             }}
-                            className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                            className="p-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
                             title="Delete project"
                           >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </button>
@@ -889,10 +846,10 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="p-2 border-t border-gray-200 ">
+          <div className="p-3 border-t border-white/5">
             <button 
               onClick={() => setShowGlobalSettings(true)}
-              className="w-full flex items-center gap-2 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all text-sm"
+              className="w-full flex items-center gap-2 p-3 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-all text-sm"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -908,24 +865,32 @@ export default function HomePage() {
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="w-full max-w-4xl">
-            <div className="text-center mb-12">
-              <div className="flex justify-center mb-6">
+            <div className="text-center mb-12 animate-fade-in">
+              <div className="flex justify-center items-center gap-4 mb-6">
+                <div className="w-14 h-14 relative">
+                  <Image
+                    src="/Claudable_Icon.png"
+                    alt="Claudable"
+                    width={56}
+                    height={56}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
                 <h1 
-                  className="font-extrabold tracking-tight select-none transition-colors duration-1000 ease-in-out"
+                  className="font-extrabold tracking-tight select-none bg-gradient-to-r from-rose-400 via-pink-400 to-rose-500 bg-clip-text text-transparent"
                   style={{
                     fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                    color: (assistantBrandColors[selectedAssistant] || assistantBrandColors.claude),
-                    letterSpacing: '-0.06em',
+                    letterSpacing: '-0.04em',
                     fontWeight: 800,
-                    fontSize: '72px',
-                    lineHeight: '72px'
+                    fontSize: '56px',
+                    lineHeight: '56px'
                   }}
                 >
                   Claudable
                 </h1>
               </div>
-              <p className="text-xl text-gray-700 font-light tracking-tight">
-                Connect CLI Agent • Build what you want • Deploy instantly
+              <p className="text-xl text-zinc-400 font-light tracking-tight">
+                {"Let's build something, together"}
               </p>
             </div>
             
@@ -938,15 +903,15 @@ export default function HomePage() {
                     <img 
                       src={image.url} 
                       alt={image.name}
-                      className="w-20 h-20 object-cover rounded-lg border border-gray-200 "
+                      className="w-20 h-20 object-cover rounded-xl border border-white/10"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs px-1 py-0.5 rounded-b-lg">
+                    <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs px-2 py-1 rounded-b-xl">
                       Image #{index + 1}
                     </div>
                     <button
                       type="button"
                       onClick={() => removeImage(image.id)}
-                      className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      className="absolute -top-2 -right-2 w-5 h-5 bg-rose-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-rose-600"
                     >
                       ×
                     </button>
@@ -962,20 +927,20 @@ export default function HomePage() {
               onDragLeave={handleDragLeave}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className={`group flex flex-col gap-4 p-4 w-full rounded-[28px] border backdrop-blur-xl text-base shadow-xl transition-all duration-150 ease-in-out mb-6 relative overflow-visible ${
+              className={`group flex flex-col gap-4 p-5 w-full rounded-2xl border backdrop-blur-xl text-base shadow-2xl transition-all duration-150 ease-in-out mb-6 relative overflow-visible ${
                 isDragOver 
-                  ? 'border-[#DE7356] bg-[#DE7356]/10 ' 
-                  : 'border-gray-200 bg-white '
+                  ? 'border-rose-500 bg-rose-500/10' 
+                  : 'border-white/10 bg-[#1a1a24]/80'
               }`}
             >
               <div className="relative flex flex-1 items-center">
                 <textarea
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Ask Claudable to create a blog about..."
+                  placeholder="Ask Claudable to create a presentation about..."
                   disabled={isCreatingProject}
-                  className="flex w-full rounded-md px-2 py-2 placeholder:text-gray-400 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none text-[16px] leading-snug md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent focus:bg-transparent flex-1 text-gray-900 overflow-y-auto"
-                  style={{ height: '120px' }}
+                  className="flex w-full rounded-lg px-1 py-2 placeholder:text-zinc-500 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 resize-none text-[16px] leading-relaxed md:text-base focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent focus:bg-transparent flex-1 text-white overflow-y-auto"
+                  style={{ height: '100px' }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       if (e.metaKey || e.ctrlKey) {
@@ -992,27 +957,27 @@ export default function HomePage() {
               
               {/* Drag overlay */}
               {isDragOver && (
-                <div className="absolute inset-0 bg-[#DE7356]/10 rounded-[28px] flex items-center justify-center z-10 border-2 border-dashed border-[#DE7356]">
+                <div className="absolute inset-0 bg-rose-500/10 rounded-2xl flex items-center justify-center z-10 border-2 border-dashed border-rose-500">
                   <div className="text-center">
-                    <div className="text-3xl mb-3">📸</div>
-                    <div className="text-lg font-semibold text-[#DE7356] mb-2">
+                    <ImageIcon className="w-8 h-8 mx-auto mb-3 text-rose-400" />
+                    <div className="text-lg font-semibold text-rose-400 mb-2">
                       Drop images here
                     </div>
-                    <div className="text-sm text-[#DE7356] ">
+                    <div className="text-sm text-rose-400/70">
                       Supports: JPG, PNG, GIF, WEBP
                     </div>
                   </div>
                 </div>
               )}
               
-              <div className="flex gap-1 flex-wrap items-center">
+              <div className="flex gap-2 flex-wrap items-center border-t border-white/5 pt-4">
                 {/* Image Upload Button */}
                 <div className="flex items-center gap-2">
                   <label 
-                    className="flex items-center justify-center w-8 h-8 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center w-9 h-9 text-zinc-400 hover:text-white hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
                     title="Upload images"
                   >
-                    <ImageIcon className="h-4 w-4" />
+                    <ImageIcon className="h-5 w-5" />
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -1032,7 +997,7 @@ export default function HomePage() {
                       setShowAssistantDropdown(!showAssistantDropdown);
                       setShowModelDropdown(false);
                     }}
-                    className="justify-center whitespace-nowrap text-sm font-medium transition-colors duration-100 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-gray-200/50 bg-transparent shadow-sm hover:bg-gray-50 hover:border-gray-300/50 px-3 py-2 flex h-8 items-center gap-1 rounded-full text-gray-700 hover:text-gray-900 focus-visible:ring-0"
+                    className="justify-center whitespace-nowrap text-sm font-medium transition-colors duration-100 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 px-3 py-2 flex h-9 items-center gap-2 rounded-xl text-zinc-300 hover:text-white focus-visible:ring-0"
                   >
                     <div className="w-4 h-4 rounded overflow-hidden">
                       <Image
@@ -1052,18 +1017,18 @@ export default function HomePage() {
                   </button>
                   
                   {showAssistantDropdown && (
-                    <div className="absolute top-full mt-1 left-0 z-[300] min-w-full whitespace-nowrap rounded-2xl border border-gray-200 bg-white backdrop-blur-xl shadow-lg">
+                    <div className="absolute top-full mt-2 left-0 z-[300] min-w-full whitespace-nowrap rounded-xl border border-white/10 bg-[#1a1a24] backdrop-blur-xl shadow-2xl overflow-hidden">
                       {ASSISTANT_OPTIONS.map((option) => (
                         <button
                           key={option.id}
                           onClick={() => handleAssistantChange(option.id)}
                           disabled={!cliStatus[option.id]?.installed}
-                          className={`w-full flex items-center gap-2 px-3 py-2 text-left first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
+                          className={`w-full flex items-center gap-2 px-3 py-2.5 text-left transition-colors ${
                             !cliStatus[option.id]?.installed
-                              ? 'opacity-50 cursor-not-allowed text-gray-400 '
+                              ? 'opacity-40 cursor-not-allowed text-zinc-500'
                               : selectedAssistant === option.id 
-                              ? 'bg-gray-100 text-black font-semibold' 
-                              : 'text-gray-800 hover:text-black hover:bg-gray-100 '
+                              ? 'bg-white/10 text-white font-medium' 
+                              : 'text-zinc-300 hover:text-white hover:bg-white/5'
                           }`}
                         >
                           <div className="w-4 h-4 rounded overflow-hidden">
@@ -1075,7 +1040,7 @@ export default function HomePage() {
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <span className="text-sm font-medium">{option.name}</span>
+                          <span className="text-sm">{option.name}</span>
                         </button>
                       ))}
                     </div>
@@ -1090,9 +1055,9 @@ export default function HomePage() {
                       setShowModelDropdown((current) => !current);
                       setShowAssistantDropdown(false);
                     }}
-                    className="justify-center whitespace-nowrap text-sm font-medium transition-colors duration-100 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-gray-200/50 bg-transparent shadow-sm hover:bg-gray-50 hover:border-gray-300/50 px-3 py-2 flex h-8 items-center gap-1 rounded-full text-gray-700 hover:text-gray-900 focus-visible:ring-0 min-w-[140px]"
+                    className="justify-center whitespace-nowrap text-sm font-medium transition-colors duration-100 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 px-3 py-2 flex h-9 items-center gap-2 rounded-xl text-zinc-300 hover:text-white focus-visible:ring-0 min-w-[140px]"
                   >
-                    <span className="text-sm font-medium whitespace-nowrap">
+                    <span className="text-sm whitespace-nowrap">
                       {availableModels.find(m => m.id === selectedModel)?.name ?? getModelDisplayName(selectedAssistant, selectedModel)}
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 -960 960 960" className="shrink-0 h-3 w-3 rotate-90 ml-auto" fill="currentColor">
@@ -1101,18 +1066,18 @@ export default function HomePage() {
                   </button>
                   
                   {showModelDropdown && (
-                    <div className="absolute top-full mt-1 left-0 z-[300] min-w-full max-h-[300px] overflow-y-auto rounded-2xl border border-gray-200 bg-white backdrop-blur-xl shadow-lg">
+                    <div className="absolute top-full mt-2 left-0 z-[300] min-w-full max-h-[300px] overflow-y-auto rounded-xl border border-white/10 bg-[#1a1a24] backdrop-blur-xl shadow-2xl scrollbar-dark">
                       {availableModels.map((model) => (
                           <button
                             key={model.id}
                             onClick={() => handleModelChange(model.id)}
-                            className={`w-full px-3 py-2 text-left first:rounded-t-2xl last:rounded-b-2xl transition-colors ${
+                            className={`w-full px-3 py-2.5 text-left transition-colors ${
                               selectedModel === model.id 
-                                ? 'bg-gray-100 text-black font-semibold' 
-                                : 'text-gray-800 hover:text-black hover:bg-gray-100 '
+                                ? 'bg-white/10 text-white font-medium' 
+                                : 'text-zinc-300 hover:text-white hover:bg-white/5'
                             }`}
                           >
-                            <span className="text-sm font-medium">{model.name}</span>
+                            <span className="text-sm">{model.name}</span>
                           </button>
                         ))}
                     </div>
